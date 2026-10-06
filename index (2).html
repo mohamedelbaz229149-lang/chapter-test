@@ -1,0 +1,599 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>اختبار منتصف الفصل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+:root{
+  --sky1:#7fd3ff;--sky2:#c9f0ff;--ink:#21304a;--card:#ffffff;--pri:#ff7a2f;--pri2:#ffb347;
+  --ok:#2ec27e;--bad:#ff5a6e;--purple:#6c4bd8;--yellow:#ffd23f;--shadow:0 8px 0 rgba(33,48,74,.12);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{font-family:"Baloo Bhaijaan 2",system-ui,sans-serif;color:var(--ink);
+  background:linear-gradient(180deg,var(--sky1),var(--sky2) 60%,#e9ffd9);min-height:100%;overflow-x:hidden;user-select:none}
+.cloud{position:fixed;font-size:70px;opacity:.85;z-index:0;animation:drift 40s linear infinite;pointer-events:none}
+@keyframes drift{from{transform:translateX(110vw)}to{transform:translateX(-30vw)}}
+.wrap{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:14px 16px 40px}
+.screen{display:none}.screen.on{display:block;animation:pop .35s ease}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:none;opacity:1}}
+.card{background:var(--card);border-radius:28px;padding:22px;box-shadow:var(--shadow);margin-bottom:16px}
+h1{font-size:clamp(28px,6vw,46px);margin:.1em 0;color:var(--purple);text-align:center;line-height:1.3}
+.sub{text-align:center;font-size:20px;margin:0 0 10px;color:#4a5a78}
+.credit{text-align:center;font-size:clamp(24px,5vw,34px);font-weight:800;color:var(--pri);margin:10px 0 18px;
+  background:#fff6e8;border-radius:20px;padding:10px;border:3px dashed var(--pri2)}
+.btn{font-family:inherit;font-weight:800;font-size:24px;border:0;border-radius:22px;padding:14px 26px;cursor:pointer;
+  background:var(--pri);color:#fff;box-shadow:0 6px 0 #c95412;transition:transform .08s}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 #c95412}
+.btn.green{background:var(--ok);box-shadow:0 6px 0 #1d8a57}
+.btn.purple{background:var(--purple);box-shadow:0 6px 0 #4a2fa3}
+.btn.gray{background:#8a97ad;box-shadow:0 6px 0 #5e6a80}
+.btn.big{font-size:30px;padding:18px 40px}
+.row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;align-items:center}
+input{font-family:inherit;font-size:26px;padding:12px 16px;border-radius:18px;border:3px solid #cdd7ea;width:100%;text-align:center;outline:none}
+input:focus{border-color:var(--purple)}
+label{display:block;font-size:20px;margin:10px 0 6px;font-weight:700}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;font-size:22px;font-weight:800}
+.pill{background:#fff;border-radius:999px;padding:6px 16px;box-shadow:var(--shadow)}
+.dots{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:12px}
+.dot{width:16px;height:16px;border-radius:50%;background:#ffffffaa;border:2px solid #fff}
+.dot.done{background:var(--yellow)}.dot.now{background:var(--pri);transform:scale(1.25)}
+.qnum{display:inline-block;background:var(--purple);color:#fff;border-radius:12px;padding:2px 14px;font-size:24px;margin-left:8px}
+.prompt{font-size:clamp(21px,4.4vw,28px);font-weight:700;line-height:1.6;margin:0 0 12px}
+.expr{display:flex;direction:rtl;justify-content:center;align-items:center;gap:12px;font-size:clamp(46px,11vw,72px);font-weight:800;margin:10px 0}
+.expr .q{color:var(--pri);min-width:1.1em;text-align:center;border-bottom:5px dashed var(--pri2)}
+.vert{display:inline-grid;grid-template-columns:auto auto;direction:ltr;font-size:clamp(46px,11vw,70px);font-weight:800;line-height:1.15;margin:6px auto}
+.vert .n{text-align:right;padding-left:18px;direction:rtl}
+.vert .s{color:var(--purple)}
+.vert .line{grid-column:1/3;border-top:6px solid var(--ink);margin:4px 0}
+.vert .ans{grid-column:1/3;text-align:right;color:var(--pri);min-height:1.1em}
+.center{text-align:center}
+.balloons{display:flex;justify-content:center;gap:clamp(10px,4vw,34px);flex-wrap:wrap;margin:18px 0 6px;min-height:170px}
+.balloon{position:relative;width:110px;height:140px;cursor:pointer;animation:bob 2.4s ease-in-out infinite}
+.balloon:nth-child(2){animation-delay:-.8s}.balloon:nth-child(3){animation-delay:-1.6s}.balloon:nth-child(4){animation-delay:-.4s}
+@keyframes bob{50%{transform:translateY(-12px)}}
+.balloon .b{width:110px;height:126px;border-radius:50% 50% 48% 48%;display:flex;align-items:center;justify-content:center;
+  font-size:46px;font-weight:800;color:#fff;text-shadow:0 3px 0 rgba(0,0,0,.18);box-shadow:inset -12px -14px 0 rgba(0,0,0,.12)}
+.balloon .b::after{content:"";position:absolute;top:22px;right:26px;width:18px;height:28px;border-radius:50%;background:rgba(255,255,255,.45)}
+.balloon .str{position:absolute;left:54px;top:124px;width:2px;height:40px;background:#8592a8}
+.balloon.popped{animation:popb .35s forwards}
+@keyframes popb{60%{transform:scale(1.35)}100%{transform:scale(0);opacity:0}}
+.balloon.wrong{animation:shake .45s}
+.balloon.dead{opacity:.25;pointer-events:none;animation:none}
+@keyframes shake{20%,60%{transform:translateX(-12px)}40%,80%{transform:translateX(12px)}}
+.shake{animation:shake .45s}
+.feedback{text-align:center;font-size:26px;font-weight:800;min-height:42px;margin-top:6px}
+.feedback.ok{color:var(--ok)}.feedback.bad{color:var(--bad)}
+.hint{background:#fff8d6;border-radius:16px;padding:8px 14px;font-size:21px;margin-top:8px;display:none;text-align:center}
+.hint.on{display:block}
+/* number line */
+.nl{width:100%;overflow:hidden;margin:6px 0}
+.nl svg{width:100%;height:auto;direction:ltr}
+.hops{font-size:24px;font-weight:800;text-align:center;margin:4px 0 10px}
+/* cubes */
+.cubes{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:14px auto;max-width:560px;direction:ltr}
+.cube{width:54px;height:54px;border-radius:10px;background:#3fa9f5;box-shadow:inset -6px -6px 0 rgba(0,0,0,.15),0 4px 0 #1f6fa8;cursor:pointer;
+  position:relative;transition:transform .2s,opacity .2s}
+.cube.alt{background:#ff8a3d;box-shadow:inset -6px -6px 0 rgba(0,0,0,.15),0 4px 0 #b65213}
+.cube.gone{opacity:.25;transform:scale(.8) rotate(-10deg)}
+.cube.gone::after{content:"✖";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#c0203a;font-size:34px;font-weight:800}
+.counter{text-align:center;font-size:24px;font-weight:800}
+/* yes/no */
+.yn{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+/* sentence */
+.slots{display:flex;direction:rtl;gap:6px;justify-content:center;align-items:center;font-size:38px;font-weight:800;margin:16px 0;flex-wrap:wrap}
+.slot{width:68px;height:72px;border:4px dashed var(--purple);border-radius:18px;display:flex;align-items:center;justify-content:center;background:#f4f0ff;cursor:pointer}
+.slot.filled{border-style:solid;background:#fff}
+.cards{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.ncard{width:70px;height:70px;border-radius:18px;background:var(--yellow);font-size:40px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 5px 0 #c9a10f;cursor:pointer}
+.ncard.used{opacity:.25;pointer-events:none}
+.story{font-size:clamp(22px,4.6vw,28px);line-height:1.7;background:#f3fbff;border-radius:18px;padding:12px 16px;text-align:center}
+/* place value / options to circle */
+.circ-opts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:16px 0;direction:rtl}
+.copt{position:relative;width:74px;height:74px;font-size:38px;font-weight:800;display:flex;align-items:center;justify-content:center;
+  background:#fff;border-radius:22px;box-shadow:var(--shadow);cursor:pointer;border:3px solid #e3e9f5}
+.copt.circled::before{content:"";position:absolute;inset:-10px;border:6px solid var(--ok);border-radius:50%;animation:draw .4s ease}
+@keyframes draw{from{transform:scale(1.5) rotate(-40deg);opacity:0}}
+.bignum{font-size:80px;font-weight:800;text-align:center;letter-spacing:6px}
+.bignum .hl{color:var(--pri);text-decoration:underline wavy var(--pri2)}
+/* compare */
+.cmp{display:flex;direction:rtl;justify-content:center;align-items:center;gap:16px;font-size:clamp(54px,13vw,80px);font-weight:800;margin:14px 0}
+.cmp .o{width:100px;height:100px;border-radius:50%;border:6px solid var(--purple);display:flex;align-items:center;justify-content:center;font-size:62px;color:var(--pri);background:#fff}
+.sign{unicode-bidi:isolate;direction:ltr;display:inline-block}
+.signbtn{width:96px;height:96px;font-size:56px;padding:0}
+.croc{font-size:20px;text-align:center;color:#3a6a3a}
+/* tens */
+.blocks{display:flex;direction:ltr;justify-content:center;align-items:flex-end;gap:5px;flex-wrap:wrap;margin:8px 0}
+.rod{width:16px;height:160px;background:repeating-linear-gradient(#6c4bd8 0 14px,#4a2fa3 14px 16px);border-radius:4px}
+.unit{width:16px;height:16px;background:#ff7a2f;border-radius:3px}
+.units{display:grid;grid-template-columns:repeat(3,16px);gap:3px;margin-right:14px}
+/* train */
+.train{display:flex;direction:rtl;justify-content:center;align-items:flex-end;gap:4px;margin:18px 0}
+.car{width:64px;height:62px;background:#ff5a6e;border-radius:14px 14px 6px 6px;color:#fff;font-size:32px;font-weight:800;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:14px;flex:none}
+.car::before,.car::after{content:"";position:absolute;bottom:-14px;width:20px;height:20px;border-radius:50%;background:#21304a}
+.car::before{right:10px}.car::after{left:10px}
+.car.alt{background:#3fa9f5}.car.miss{background:#fff;color:var(--pri);border:4px dashed var(--pri)}
+.engine{font-size:54px;line-height:1;flex:none}
+/* end */
+.stars{font-size:70px;text-align:center;letter-spacing:8px}
+.score{font-size:40px;text-align:center;font-weight:800;color:var(--purple)}
+table{width:100%;border-collapse:collapse;font-size:22px}
+th,td{padding:8px 6px;text-align:center;border-bottom:2px solid #eef2f9}
+th{color:#6a7891;font-size:18px}
+tr.me td{background:#fff3c4;font-weight:800}
+.lbnote{font-size:15px;color:#7d8aa3;text-align:center;margin-top:8px}
+.conf{position:fixed;top:-40px;font-size:32px;z-index:50;pointer-events:none;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg)}}
+.mascot{font-size:64px;text-align:center;line-height:1}
+</style>
+</head>
+<body>
+<div class="cloud" style="top:6%;animation-duration:55s">☁️</div>
+<div class="cloud" style="top:30%;animation-duration:70s;animation-delay:-30s">☁️</div>
+<div class="cloud" style="top:62%;animation-duration:62s;animation-delay:-12s">☁️</div>
+<div class="wrap">
+
+  <!-- start -->
+  <section id="s-start" class="screen on">
+    <div class="card">
+      <div class="mascot">🦉🎈</div>
+      <h1>اختبار منتصف الفصل</h1>
+      <p class="sub">الدروس ١ - ٤ • الطرح</p>
+      <div class="credit">إعداد الأستاذ علاء المنشاوي</div>
+      <label for="nm">✏️ اكتب اسمك</label>
+      <input id="nm" maxlength="24" placeholder="اسمك هنا" autocomplete="off">
+      <label for="cl">🏫 فصلك</label>
+      <input id="cl" maxlength="12" placeholder="مثل ٢ أ" autocomplete="off">
+      <div class="feedback bad" id="startMsg"></div>
+      <div class="row" style="margin-top:8px">
+        <button class="btn big" id="goBtn">هيا نلعب 🚀</button>
+        <button class="btn purple" id="lbBtn">🏆 المتصدرون</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- play -->
+  <section id="s-play" class="screen">
+    <div class="topbar">
+      <span class="pill" id="who">👦</span>
+      <span class="pill">⭐ <span id="pts">٠</span></span>
+    </div>
+    <div class="dots" id="dots"></div>
+    <div class="card" id="stage"></div>
+  </section>
+
+  <!-- end -->
+  <section id="s-end" class="screen">
+    <div class="card center">
+      <div class="mascot">🏆</div>
+      <h1 id="endTitle">أحسنت</h1>
+      <div class="stars" id="endStars"></div>
+      <div class="score" id="endScore"></div>
+      <div class="sub" id="endTime"></div>
+      <div class="row" style="margin-top:12px">
+        <button class="btn purple" id="toLb">🏆 شاهد المتصدرين</button>
+        <button class="btn green" id="again">🔁 العب مرة أخرى</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- leaderboard -->
+  <section id="s-lb" class="screen">
+    <div class="card">
+      <h1>🏆 قائمة المتصدرين</h1>
+      <p class="sub">اختبار منتصف الفصل</p>
+      <div id="lbBody">جارٍ التحميل…</div>
+      <div class="lbnote" id="lbNote"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn gray" id="lbBack">↩️ رجوع</button>
+        <button class="btn purple" id="lbRefresh">🔄 تحديث</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+const EXAM = {"id": "chapter_test_1_4", "title": "اختبار منتصف الفصل", "subtitle": "الدروس ١ - ٤ • الطرح", "questions": [{"n": 1, "type": "frog", "prompt": "اطرح بالعد التنازلي مستعملًا خط الأعداد 🐸", "start": 7, "sub": 3, "answer": 4}, {"n": 2, "type": "frog", "prompt": "اطرح بالعد التنازلي مستعملًا خط الأعداد 🐸", "start": 12, "sub": 3, "answer": 9}, {"n": 3, "type": "frog", "prompt": "اطرح بالعد التنازلي مستعملًا خط الأعداد 🐸", "start": 11, "sub": 2, "answer": 9}, {"n": 4, "type": "frog", "prompt": "اطرح بالعد التنازلي مستعملًا خط الأعداد 🐸", "start": 9, "sub": 0, "answer": 9}, {"n": 5, "type": "zero", "yn": true, "prompt": "أوجد ناتج الطرح، ثم أحوّط المسألة التي ناتج الطرح فيها يساوي صفرًا", "a": 7, "b": 3, "answer": 4}, {"n": 6, "type": "zero", "yn": true, "prompt": "أوجد ناتج الطرح، ثم أحوّط المسألة التي ناتج الطرح فيها يساوي صفرًا", "a": 3, "b": 3, "answer": 0}, {"n": 7, "type": "zero", "yn": true, "prompt": "أوجد ناتج الطرح، ثم أحوّط المسألة التي ناتج الطرح فيها يساوي صفرًا", "a": 10, "b": 5, "answer": 5}, {"n": 8, "type": "zero", "yn": true, "prompt": "أوجد ناتج الطرح، ثم أحوّط المسألة التي ناتج الطرح فيها يساوي صفرًا", "a": 8, "b": 8, "answer": 0}, {"n": 9, "type": "cubes", "yn": true, "prompt": "أجد الناتج مستعملًا المكعبات، ثم أحوّط المسألة التي استعملت فيها حقائق جمع العدد نفسه", "a": 6, "b": 3, "answer": 3, "pairs": true, "doubles": true, "explain": "لأن ٣ + ٣ = ٦"}, {"n": 10, "type": "cubes", "yn": true, "prompt": "أجد الناتج مستعملًا المكعبات، ثم أحوّط المسألة التي استعملت فيها حقائق جمع العدد نفسه", "a": 5, "b": 5, "answer": 0, "doubles": false, "explain": "لأن ٥ + ٠ = ٥ وليس عددًا مع نفسه"}, {"n": 11, "type": "cubes", "yn": true, "prompt": "أجد الناتج مستعملًا المكعبات، ثم أحوّط المسألة التي استعملت فيها حقائق جمع العدد نفسه", "a": 16, "b": 8, "answer": 8, "pairs": true, "doubles": true, "explain": "لأن ٨ + ٨ = ١٦"}, {"n": 12, "type": "cubes", "yn": true, "mode": "missing", "prompt": "أجد العدد المفقود مستعملًا المكعبات، ثم أحوّط المسألة التي استعملت فيها حقائق جمع العدد نفسه", "a": 8, "rest": 4, "answer": 4, "pairs": true, "doubles": true, "explain": "لأن ٤ + ٤ = ٨"}, {"n": 13, "type": "sentence", "prompt": "أكتب جملة عددية لأحل المسألة", "story": "💰 مع منال ١٢ ريالًا، إذا أعطت أختها ٦ ريالات، فكم ريالًا يبقى مع منال؟", "cards": [12, 6, 6, 18, 3], "answer": [12, 6, 6], "hint": "نبدأ بما معها ثم نطرح ما أعطته لأختها"}]};
+const $ = s => document.querySelector(s);
+const ar = n => String(n).replace(/\d/g, d => '٠١٢٣٤٥٦٧٨٩'[d]);
+const MINUS = '−';
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const COLORS = ['#ff5a6e', '#3fa9f5', '#2ec27e', '#ffb020', '#8b5cf6', '#ff7a2f'];
+
+/* ---------- sound ---------- */
+let AC = null;
+function tone(f, t0, d, type = 'sine', v = .18) {
+  try {
+    AC = AC || new (window.AudioContext || window.webkitAudioContext)();
+    const o = AC.createOscillator(), g = AC.createGain();
+    o.type = type; o.frequency.value = f; o.connect(g); g.connect(AC.destination);
+    const s = AC.currentTime + t0; g.gain.setValueAtTime(v, s); g.gain.exponentialRampToValueAtTime(.001, s + d);
+    o.start(s); o.stop(s + d + .02);
+  } catch (e) {}
+}
+const sGood = () => [523, 659, 784, 1046].forEach((f, i) => tone(f, i * .09, .25, 'triangle'));
+const sBad = () => { tone(220, 0, .22, 'sawtooth', .08); tone(180, .15, .3, 'sawtooth', .08); };
+const sPop = () => tone(900, 0, .08, 'square', .1);
+const sHop = () => tone(600, 0, .1, 'sine', .15);
+const sWin = () => [523, 587, 659, 698, 784, 880, 988, 1046].forEach((f, i) => tone(f, i * .1, .3, 'triangle'));
+
+function confetti(n = 26) {
+  const em = ['⭐', '🎉', '🎈', '✨', '🌟'];
+  for (let i = 0; i < n; i++) {
+    const d = document.createElement('div'); d.className = 'conf';
+    d.textContent = em[i % em.length]; d.style.left = Math.random() * 100 + 'vw';
+    d.style.animationDuration = (1.6 + Math.random() * 1.6) + 's'; d.style.animationDelay = Math.random() * .4 + 's';
+    document.body.appendChild(d); setTimeout(() => d.remove(), 3800);
+  }
+}
+const PRAISE = ['أحسنت 🌟', 'رائع 👏', 'ممتاز 🎉', 'بطل 💪', 'عبقري 🧠', 'صح عليك ⭐'];
+const praise = () => PRAISE[Math.floor(Math.random() * PRAISE.length)];
+
+/* ---------- state ---------- */
+let S = {};
+const ptsFor = w => w === 0 ? 10 : w === 1 ? 6 : 3;
+const stagesOf = q => (q.yn ? 2 : 1);
+const MAX = EXAM.questions.reduce((s, q) => s + stagesOf(q) * 10, 0);
+
+function show(id) { document.querySelectorAll('.screen').forEach(e => e.classList.remove('on')); $(id).classList.add('on'); window.scrollTo(0, 0); }
+function addPts(p) { S.score += p; $('#pts').textContent = ar(S.score); }
+
+function drawDots() {
+  const d = $('#dots'); d.innerHTML = '';
+  EXAM.questions.forEach((q, i) => { const e = document.createElement('div'); e.className = 'dot' + (i < S.i ? ' done' : i === S.i ? ' now' : ''); d.appendChild(e); });
+}
+
+function feedback(el, ok, txt) { el.className = 'feedback ' + (ok ? 'ok' : 'bad'); el.textContent = txt; }
+
+/* ---------- components ---------- */
+function makeOptions(ans, extra) {
+  const set = new Set([ans]);
+  (extra || []).forEach(x => set.size < 4 && x >= 0 && set.add(x));
+  const near = shuffle([1, -1, 2, -2, 3, 10, -10]);
+  for (const k of near) { if (set.size >= 3) break; if (ans + k >= 0) set.add(ans + k); }
+  return shuffle([...set]);
+}
+
+function balloons(box, opts, ans, done, onWrong) {
+  const wrap = document.createElement('div'); wrap.className = 'balloons'; box.appendChild(wrap);
+  const fb = document.createElement('div'); fb.className = 'feedback'; box.appendChild(fb);
+  let wrong = 0, finished = false;
+  opts.forEach((v, i) => {
+    const b = document.createElement('div'); b.className = 'balloon'; b.dataset.v = v;
+    b.innerHTML = `<div class="b" style="background:${COLORS[i % COLORS.length]}">${ar(v)}</div><div class="str"></div>`;
+    b.onclick = () => {
+      if (finished) return;
+      if (v === ans) {
+        finished = true; sPop(); sGood(); b.classList.add('popped'); feedback(fb, true, praise()); confetti(14);
+        setTimeout(() => done(wrong), 900);
+      } else {
+        wrong++; sBad(); b.classList.add('wrong'); feedback(fb, false, 'حاول مرة أخرى 💪');
+        setTimeout(() => b.classList.add('dead'), 450); onWrong && onWrong(wrong);
+      }
+    };
+    wrap.appendChild(b);
+  });
+}
+
+function yesNo(box, question, correct, explain, done) {
+  const p = document.createElement('p'); p.className = 'prompt center'; p.innerHTML = question; box.appendChild(p);
+  const r = document.createElement('div'); r.className = 'yn'; box.appendChild(r);
+  const fb = document.createElement('div'); fb.className = 'feedback'; box.appendChild(fb);
+  let wrong = 0, fin = false;
+  [[true, '⭕ نعم'], [false, '✖️ لا']].forEach(([val, txt]) => {
+    const b = document.createElement('button'); b.className = 'btn ' + (val ? 'green' : 'gray'); b.textContent = txt;
+    b.onclick = () => {
+      if (fin) return;
+      if (val === correct) { fin = true; sGood(); feedback(fb, true, praise() + ' ' + explain); confetti(10); setTimeout(() => done(wrong), 1700); }
+      else { wrong++; sBad(); b.classList.add('shake'); setTimeout(() => b.classList.remove('shake'), 500); feedback(fb, false, 'فكّر مرة أخرى 🤔'); }
+    };
+    r.appendChild(b);
+  });
+}
+
+function header(box, q, text) {
+  box.innerHTML = `<p class="prompt"><span class="qnum">${ar(q.n)}</span>${text}</p>`;
+}
+function expr(parts) { // parts in reading order (right to left)
+  return `<div class="expr">${parts.map(p => p === '?' ? '<span class="q">؟</span>' : `<span>${typeof p === 'number' ? ar(p) : p}</span>`).join('')}</div>`;
+}
+function vertical(nums, sign, showAns) {
+  let h = '<div class="center"><div class="vert">';
+  nums.forEach((n, i) => { h += `<span class="s">${i === nums.length - 1 ? sign : ''}</span><span class="n">${ar(n)}</span>`; });
+  h += `<div class="line"></div><div class="ans" data-ans>${showAns ? '؟' : ''}</div></div></div>`;
+  return h;
+}
+function hintBox(box, text) { const h = document.createElement('div'); h.className = 'hint'; h.textContent = '💡 ' + text; box.appendChild(h); return h; }
+
+/* ---------- question types ---------- */
+const T = {};
+
+T.balloons = (box, q, done) => {
+  header(box, q, q.prompt);
+  box.insertAdjacentHTML('beforeend', q.vertical ? vertical(q.vertical, q.sign || '+', true) : expr(q.expr));
+  const h = q.hint ? hintBox(box, q.hint) : null;
+  balloons(box, makeOptions(q.answer, q.distract), q.answer, w => done(w), w => { if (h && w >= 1) h.classList.add('on'); });
+};
+
+T.frog = (box, q, done) => {
+  header(box, q, q.prompt);
+  box.insertAdjacentHTML('beforeend', expr([q.start, MINUS, q.sub, '=', '?']));
+  const W = 540, L = 26, step = (W - 2 * L) / 12;
+  const x = n => L + n * step;
+  let ticks = '';
+  for (let i = 0; i <= 12; i++) ticks += `<line x1="${x(i)}" y1="92" x2="${x(i)}" y2="112" stroke="#21304a" stroke-width="3"/><text x="${x(i)}" y="140" font-size="25" font-weight="800" text-anchor="middle" fill="#21304a">${ar(i)}</text>`;
+  const nl = document.createElement('div'); nl.className = 'nl';
+  nl.innerHTML = `<svg viewBox="0 0 ${W} 150"><defs><marker id="ah" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#c0392b"/></marker></defs>
+    <line x1="14" y1="102" x2="${W - 14}" y2="102" stroke="#c0392b" stroke-width="4" marker-start="url(#ah)" marker-end="url(#ah)"/>${ticks}
+    <g id="arcs"></g><text id="frog" x="${x(q.start)}" y="80" font-size="44" text-anchor="middle" style="transition:all .35s">🐸</text></svg>`;
+  box.appendChild(nl);
+  const hops = document.createElement('div'); hops.className = 'hops'; box.appendChild(hops);
+  const r = document.createElement('div'); r.className = 'row'; box.appendChild(r);
+  const fb = document.createElement('div'); fb.className = 'feedback'; box.appendChild(fb);
+  const h = hintBox(box, `ابدأ من ${ar(q.start)} واقفز ${ar(q.sub)} قفزات إلى الخلف`);
+  let pos = q.start, wrong = 0, fin = false;
+  const frog = nl.querySelector('#frog'), arcs = nl.querySelector('#arcs');
+  const upd = () => {
+    frog.setAttribute('x', x(pos)); const n = q.start - pos;
+    hops.innerHTML = `عدد القفزات: <span style="color:var(--pri)">${ar(n)}</span>`;
+    let a = ''; for (let k = q.start; k > pos; k--) a += `<path d="M${x(k)},88 Q${(x(k) + x(k - 1)) / 2},40 ${x(k - 1)},88" fill="none" stroke="#2ec27e" stroke-width="3" stroke-dasharray="6 5"/>`;
+    arcs.innerHTML = a;
+  };
+  const mk = (t, c, f) => { const b = document.createElement('button'); b.className = 'btn ' + c; b.textContent = t; b.onclick = f; r.appendChild(b); };
+  mk('🐸 اقفز للخلف', 'purple', () => { if (fin || pos <= 0) return; pos--; sHop(); upd(); });
+  mk('↩️ تراجع', 'gray', () => { if (fin || pos >= q.start) return; pos++; sHop(); upd(); });
+  mk('✅ هنا الناتج', 'green', () => {
+    if (fin) return;
+    if (pos === q.answer) {
+      fin = true; sGood(); confetti(16);
+      feedback(fb, true, `${praise()}  ${ar(q.start)} ${MINUS} ${ar(q.sub)} = ${ar(q.answer)}`);
+      box.querySelector('.expr .q').textContent = ar(q.answer);
+      setTimeout(() => done(wrong), 1400);
+    } else {
+      wrong++; sBad(); feedback(fb, false, 'عدّ القفزات مرة أخرى 🐸'); if (wrong >= 1) h.classList.add('on');
+    }
+  });
+  upd();
+};
+
+T.zero = (box, q, done) => { // vertical subtraction, then is it zero?
+  header(box, q, q.prompt);
+  box.insertAdjacentHTML('beforeend', vertical([q.a, q.b], MINUS, true));
+  const stage = document.createElement('div'); box.appendChild(stage);
+  balloons(stage, makeOptions(q.answer, [q.a - q.b + 1]), q.answer, w1 => {
+    addPts(ptsFor(w1));
+    box.querySelector('[data-ans]').textContent = ar(q.answer);
+    stage.innerHTML = '';
+    const z = q.answer === 0;
+    yesNo(stage, 'هل ناتج الطرح <b>صفر</b>؟ إذا كان صفرًا نحوّط المسألة ⭕', z,
+      z ? 'نحوّطها لأن الناتج صفر ⭕' : 'الناتج ليس صفرًا', w2 => {
+        if (z) box.querySelector('.vert').style.cssText += ';border:6px solid var(--ok);border-radius:50%;padding:18px 34px';
+        done(w2);
+      });
+  });
+};
+
+T.cubes = (box, q, done) => {
+  header(box, q, q.prompt);
+  const parts = q.mode === 'missing' ? [q.a, MINUS, '?', '=', q.rest] : [q.a, MINUS, q.b, '=', '?'];
+  box.insertAdjacentHTML('beforeend', expr(parts));
+  const instr = document.createElement('p'); instr.className = 'prompt center';
+  instr.innerHTML = q.mode === 'missing'
+    ? `🧊 اضغط على المكعبات لتأخذها حتى يبقى <b>${ar(q.rest)}</b> مكعبات`
+    : (q.b === 0 ? 'لن نأخذ أي مكعب' : `🧊 اضغط على <b>${ar(q.b)}</b> مكعبات لتأخذها`);
+  box.appendChild(instr);
+  const cw = document.createElement('div'); cw.className = 'cubes'; box.appendChild(cw);
+  const cnt = document.createElement('div'); cnt.className = 'counter'; box.appendChild(cnt);
+  const r = document.createElement('div'); r.className = 'row'; r.style.marginTop = '10px'; box.appendChild(r);
+  const fb = document.createElement('div'); fb.className = 'feedback'; box.appendChild(fb);
+  let removed = 0, wrong = 0, fin = false;
+  const upd = () => cnt.innerHTML = `أخذنا: <span style="color:var(--bad)">${ar(removed)}</span> &nbsp; بقي: <span style="color:var(--ok)">${ar(q.a - removed)}</span>`;
+  for (let i = 0; i < q.a; i++) {
+    const c = document.createElement('div'); c.className = 'cube' + (q.pairs && i >= q.a / 2 ? ' alt' : '');
+    c.onclick = () => { if (fin) return; c.classList.toggle('gone'); removed += c.classList.contains('gone') ? 1 : -1; sPop(); upd(); };
+    cw.appendChild(c);
+  }
+  upd();
+  const target = q.mode === 'missing' ? q.a - q.rest : q.b;
+  const ok = document.createElement('button'); ok.className = 'btn green'; ok.textContent = '✅ انتهيت'; r.appendChild(ok);
+  ok.onclick = () => {
+    if (fin) return;
+    if (removed === target) {
+      fin = true; sGood(); feedback(fb, true, praise()); r.remove();
+      const st = document.createElement('div'); box.appendChild(st);
+      const p = document.createElement('p'); p.className = 'prompt center';
+      p.textContent = q.mode === 'missing' ? 'كم مكعبًا أخذنا؟ اختر البالون الصحيح 🎈' : 'كم مكعبًا بقي؟ اختر البالون الصحيح 🎈';
+      st.appendChild(p);
+      balloons(st, makeOptions(q.answer), q.answer, w1 => {
+        addPts(ptsFor(wrong + w1));
+        box.querySelector('.expr .q').textContent = ar(q.answer);
+        st.innerHTML = ''; fb.textContent = '';
+        yesNo(st, 'هل استعملنا هنا <b>حقائق جمع العدد نفسه</b>؟ (مثل ٤ + ٤) ⭕', q.doubles, q.explain, w2 => {
+          if (q.doubles) box.querySelector('.expr').style.cssText += ';border:6px solid var(--ok);border-radius:60px;padding:4px 20px';
+          done(w2);
+        });
+      });
+    } else {
+      wrong++; sBad(); cw.classList.add('shake'); setTimeout(() => cw.classList.remove('shake'), 500);
+      feedback(fb, false, q.mode === 'missing' ? `يجب أن يبقى ${ar(q.rest)} فقط` : `يجب أن نأخذ ${ar(q.b)} مكعبات`);
+    }
+  };
+};
+
+T.sentence = (box, q, done) => {
+  header(box, q, q.prompt);
+  box.insertAdjacentHTML('beforeend', `<div class="story">${q.story}</div>`);
+  const sl = document.createElement('div'); sl.className = 'slots'; box.appendChild(sl);
+  const slots = [null, null, null];
+  const sEls = [];
+  const addSlot = i => { const s = document.createElement('div'); s.className = 'slot'; s.onclick = () => clear(i); sl.appendChild(s); sEls[i] = s; };
+  addSlot(0); sl.insertAdjacentHTML('beforeend', `<span>${MINUS}</span>`); addSlot(1); sl.insertAdjacentHTML('beforeend', '<span>=</span>'); addSlot(2);
+  sl.insertAdjacentHTML('beforeend', '<span style="font-size:22px">ريالات</span>');
+  const cards = document.createElement('div'); cards.className = 'cards'; box.appendChild(cards);
+  const r = document.createElement('div'); r.className = 'row'; r.style.marginTop = '14px'; box.appendChild(r);
+  const fb = document.createElement('div'); fb.className = 'feedback'; box.appendChild(fb);
+  const cEls = [];
+  shuffle(q.cards).forEach((v, k) => {
+    const c = document.createElement('div'); c.className = 'ncard'; c.textContent = ar(v); cEls.push({ el: c, v });
+    c.onclick = () => { const i = slots.indexOf(null); if (i < 0) return; slots[i] = k; c.classList.add('used'); sEls[i].textContent = ar(v); sEls[i].classList.add('filled'); sPop(); };
+    cards.appendChild(c);
+  });
+  const vals = () => slots.map(k => k === null ? null : cEls[k].v);
+  function clear(i) { if (slots[i] === null) return; cEls[slots[i]].el.classList.remove('used'); slots[i] = null; sEls[i].textContent = ''; sEls[i].classList.remove('filled'); }
+  let wrong = 0, fin = false;
+  const h = hintBox(box, q.hint);
+  const b = document.createElement('button'); b.className = 'btn green'; b.textContent = '✅ تحقق'; r.appendChild(b);
+  b.onclick = () => {
+    if (fin) return;
+    const v = vals();
+    if (v.includes(null)) { feedback(fb, false, 'أكمل الخانات الثلاث أولًا ✏️'); return; }
+    if (v.every((x, i) => x === q.answer[i])) { fin = true; sGood(); confetti(20); feedback(fb, true, praise() + ` يبقى مع منال ${ar(q.answer[2])} ريالات 💰`); setTimeout(() => done(wrong), 1600); }
+    else { wrong++; sBad(); sl.classList.add('shake'); setTimeout(() => sl.classList.remove('shake'), 500); feedback(fb, false, 'راجع الجملة مرة أخرى 🤔'); h.classList.add('on'); }
+  };
+};
+
+T.circle = (box, q, done) => {
+  header(box, q, q.prompt);
+  box.insertAdjacentHTML('beforeend', q.visual || '');
+  const w = document.createElement('div'); w.className = 'circ-opts'; box.appendChild(w);
+  const fb = document.createElement('div'); fb.className = 'feedback'; box.appendChild(fb);
+  const h = q.hint ? hintBox(box, q.hint) : null;
+  let wrong = 0, fin = false;
+  q.options.forEach(v => {
+    const o = document.createElement('div'); o.className = 'copt'; o.textContent = ar(v);
+    o.onclick = () => {
+      if (fin) return;
+      if (v === q.answer) { fin = true; o.classList.add('circled'); sGood(); confetti(16); feedback(fb, true, praise() + ' ' + (q.explain || '')); setTimeout(() => done(wrong), 1600); }
+      else { wrong++; sBad(); o.classList.add('shake'); setTimeout(() => o.classList.remove('shake'), 500); feedback(fb, false, 'حاول مرة أخرى 💪'); h && h.classList.add('on'); }
+    };
+    w.appendChild(o);
+  });
+};
+
+T.compare = (box, q, done) => {
+  header(box, q, q.prompt);
+  // a appears on the right (read first). The correct visual sign opens toward the bigger number.
+  const vis = q.a === q.b ? '=' : (q.a > q.b ? '<' : '>');
+  box.insertAdjacentHTML('beforeend', `<div class="cmp"><span>${ar(q.a)}</span><span class="o" id="co"></span><span>${ar(q.b)}</span></div>
+    <div class="croc">🐊 فم التمساح يفتح دائمًا نحو العدد الأكبر</div>`);
+  const r = document.createElement('div'); r.className = 'row'; r.style.marginTop = '14px'; box.appendChild(r);
+  const fb = document.createElement('div'); fb.className = 'feedback'; box.appendChild(fb);
+  let wrong = 0, fin = false;
+  ['<', '=', '>'].forEach(s => {
+    const b = document.createElement('button'); b.className = 'btn purple signbtn'; b.innerHTML = `<span class="sign">${s}</span>`;
+    b.onclick = () => {
+      if (fin) return;
+      box.querySelector('#co').innerHTML = `<span class="sign">${s}</span>`;
+      if (s === vis) { fin = true; sGood(); confetti(16); feedback(fb, true, praise() + (q.a === q.b ? ' العددان متساويان' : ` ${ar(Math.max(q.a, q.b))} أكبر من ${ar(Math.min(q.a, q.b))}`)); setTimeout(() => done(wrong), 1500); }
+      else { wrong++; sBad(); b.classList.add('shake'); setTimeout(() => { b.classList.remove('shake'); if (!fin) box.querySelector('#co').innerHTML = ''; }, 600); feedback(fb, false, 'قارن الآحاد والعشرات مرة أخرى 🤔'); }
+    };
+    r.appendChild(b);
+  });
+};
+
+T.tens = (box, q, done) => {
+  header(box, q, q.prompt);
+  box.insertAdjacentHTML('beforeend', expr([q.tens * 10, '+', q.ones, '=', '?']));
+  let blocks = '<div class="blocks">';
+  for (let i = 0; i < q.tens; i++) blocks += '<div class="rod"></div>';
+  blocks += '<div class="units">'; for (let i = 0; i < q.ones; i++) blocks += '<div class="unit"></div>'; blocks += '</div></div>';
+  box.insertAdjacentHTML('beforeend', blocks + `<p class="center" style="font-size:20px;margin:0">${ar(q.tens)} عشرات و ${ar(q.ones)} آحاد</p>`);
+  balloons(box, makeOptions(q.answer, [q.tens + q.ones, q.ones * 10 + q.tens]), q.answer, w => done(w));
+};
+
+T.train = (box, q, done) => {
+  header(box, q, q.prompt);
+  let h = '<div class="train">';
+  q.seq.forEach((v, i) => { h += v === null ? '<div class="car miss" id="mc">؟</div>' : `<div class="car${i % 2 ? ' alt' : ''}">${ar(v)}</div>`; });
+  h += '<div class="engine">🚂</div></div>';
+  box.insertAdjacentHTML('beforeend', h.replace('<div class="train">', '<div class="train">'));
+  // engine should lead on the right: move it first
+  const tr = box.querySelector('.train'); tr.prepend(tr.querySelector('.engine'));
+  const hb = hintBox(box, q.hint);
+  balloons(box, makeOptions(q.answer, q.distract), q.answer, w => { box.querySelector('#mc').textContent = ar(q.answer); box.querySelector('#mc').classList.remove('miss'); done(w); }, () => hb.classList.add('on'));
+};
+
+/* ---------- flow ---------- */
+function startGame() {
+  const name = $('#nm').value.trim(), cls = $('#cl').value.trim();
+  if (!name) { $('#startMsg').textContent = 'اكتب اسمك أولًا ✏️'; $('#nm').classList.add('shake'); setTimeout(() => $('#nm').classList.remove('shake'), 500); return; }
+  try { localStorage.setItem('kidName', name); localStorage.setItem('kidClass', cls); } catch (e) {}
+  S = { name, cls, i: 0, score: 0, t0: Date.now() };
+  $('#who').textContent = '👦 ' + name; $('#pts').textContent = ar(0);
+  show('#s-play'); nextQ();
+}
+function nextQ() {
+  if (S.i >= EXAM.questions.length) return finish();
+  drawDots();
+  const q = EXAM.questions[S.i], box = $('#stage');
+  box.innerHTML = ''; box.classList.remove('on'); void box.offsetWidth;
+  T[q.type](box, q, w => { addPts(ptsFor(w)); S.i++; nextQ(); });
+}
+function finish() {
+  const secs = Math.round((Date.now() - S.t0) / 1000), pct = S.score / MAX;
+  const st = pct >= .9 ? 3 : pct >= .7 ? 2 : 1;
+  $('#endTitle').textContent = st === 3 ? 'بطل الرياضيات 🏅' : st === 2 ? 'أحسنت 👏' : 'أحسنت، واصل التدريب 💪';
+  $('#endStars').textContent = '⭐'.repeat(st) + '☆'.repeat(3 - st);
+  $('#endScore').textContent = `${ar(S.score)} من ${ar(MAX)} نقطة`;
+  $('#endTime').textContent = `⏱️ الوقت: ${fmtTime(secs)}`;
+  show('#s-end'); sWin(); confetti(50);
+  S.secs = secs; saveScore({ name: S.name, cls: S.cls, score: S.score, max: MAX, time: secs, ts: Date.now() });
+}
+const fmtTime = s => `${ar(Math.floor(s / 60))}:${ar(String(s % 60).padStart(2, '0'))}`;
+
+/* ---------- leaderboard (shared via Firebase Realtime Database, local fallback) ---------- */
+const DB = (window.LEADERBOARD_DB_URL || '').replace(/\/+$/, '');
+const keyOf = (n, c) => (n + '_' + c).replace(/[.#$\[\]\/\s]+/g, '-').slice(0, 60) || 'player';
+const better = (a, b) => !b || a.score > b.score || (a.score === b.score && a.time < b.time);
+async function loadAll() {
+  if (DB) {
+    const r = await fetch(`${DB}/scores/${EXAM.id}.json`, { cache: 'no-store' });
+    if (!r.ok) throw new Error('db');
+    return Object.values((await r.json()) || {});
+  }
+  try { return Object.values(JSON.parse(localStorage.getItem('lb_' + EXAM.id) || '{}')); } catch (e) { return []; }
+}
+async function saveScore(e) {
+  const k = keyOf(e.name, e.cls);
+  try {
+    if (DB) {
+      const cur = await (await fetch(`${DB}/scores/${EXAM.id}/${encodeURIComponent(k)}.json`, { cache: 'no-store' })).json();
+      if (better(e, cur)) await fetch(`${DB}/scores/${EXAM.id}/${encodeURIComponent(k)}.json`, { method: 'PUT', body: JSON.stringify(e) });
+    } else {
+      const all = JSON.parse(localStorage.getItem('lb_' + EXAM.id) || '{}');
+      if (better(e, all[k])) { all[k] = e; localStorage.setItem('lb_' + EXAM.id, JSON.stringify(all)); }
+    }
+  } catch (err) { console.warn('save failed', err); }
+}
+let lbTimer = null;
+async function renderLb() {
+  const body = $('#lbBody');
+  try {
+    const rows = (await loadAll()).sort((a, b) => b.score - a.score || a.time - b.time).slice(0, 30);
+    if (!rows.length) { body.innerHTML = '<p class="center prompt">لا يوجد متسابقون بعد… كن أنت الأول 🥇</p>'; }
+    else {
+      const me = S.name ? keyOf(S.name, S.cls || '') : null;
+      body.innerHTML = `<table><tr><th>المركز</th><th>الاسم</th><th>الفصل</th><th>النقاط</th><th>الوقت</th></tr>${rows.map((r, i) =>
+        `<tr class="${me && keyOf(r.name, r.cls || '') === me ? 'me' : ''}"><td>${['🥇', '🥈', '🥉'][i] || ar(i + 1)}</td><td>${esc(r.name)}</td><td>${esc(ar(r.cls || ''))}</td><td>${ar(r.score)}</td><td>${fmtTime(r.time)}</td></tr>`).join('')}</table>`;
+    }
+    $('#lbNote').textContent = DB ? 'القائمة مشتركة بين كل الطلاب وتتحدث تلقائيًا' : 'القائمة محفوظة على هذا الجهاز فقط حتى يتم ربط قاعدة البيانات';
+  } catch (e) { body.innerHTML = '<p class="center prompt">تعذر تحميل القائمة، تأكد من الإنترنت 📶</p>'; }
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+function openLb() { show('#s-lb'); renderLb(); clearInterval(lbTimer); lbTimer = setInterval(renderLb, 8000); }
+
+$('#goBtn').onclick = startGame;
+$('#nm').addEventListener('keydown', e => e.key === 'Enter' && startGame());
+$('#lbBtn').onclick = openLb; $('#toLb').onclick = () => setTimeout(openLb, 400);
+$('#lbRefresh').onclick = renderLb;
+$('#lbBack').onclick = () => { clearInterval(lbTimer); show(S.secs ? '#s-end' : '#s-start'); };
+$('#again').onclick = () => { S.secs = 0; show('#s-start'); };
+try { $('#nm').value = localStorage.getItem('kidName') || ''; $('#cl').value = localStorage.getItem('kidClass') || ''; } catch (e) {}
+</script>
+</body>
+</html>
